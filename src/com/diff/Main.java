@@ -21,10 +21,10 @@ public class Main {
         HashSet<String> addSet = new HashSet<>();
 
         String diffFilename = "diff_" + Paths.get(input1).getFileName();
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(diffFilename));
+        PrintWriter writer = new PrintWriter(diffFilename);
 
         String line;
-        System.out.println("------- ZAWARTOŒÆ PLIKÓW: -------");
+        System.out.println("------- ZAWARTOÅšÄ† PLIKÃ“W: -------");
         System.out.println("Plik 1:");
         while ((line = reader1.readLine()) != null) {
             list1.add(line);
@@ -57,22 +57,18 @@ public class Main {
             }
         }
 
-        System.out.println("\nRó¿nice w plikach:");
-        writer.write("Ró¿nice w plikach:\n");
+        printlnSave("RÃ³Å¼nice w plikach:", writer);
         if (size1 >= size2) {
             for (int i = 0; i < size2; i++) {
                 String line1 = list1.get(i);
                 String line2 = list2.get(i);
                 if (!(list1.contains(line2))) {
-                    System.out.print("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ");
-                    writer.write("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ");
+                    printlnSave("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ", writer);
                     stringDiff(line1, line2, writer);
-                    System.out.println("P1 l." + (i + 1) + ": " + line1);
-                    System.out.println("P2 l." + (i + 1) + ": " + line2);
+                    printlnSave("P1 l." + (i + 1) + ": " + line1, writer);
+                    printlnSave("P2 l." + (i + 1) + ": " + line2, writer);
                     addSet.add(line1);
                     addSet.add(line2);
-                    writer.write("P1 l." + (i + 1) + ": " + line1 + "\n");
-                    writer.write("P2 l." + (i + 1) + ": " + line2 + "\n");
                 }
             }
         } else {
@@ -80,58 +76,57 @@ public class Main {
                 String line1 = list1.get(i);
                 String line2 = list2.get(i);
                 if (!(list2.contains(line1))) {
-                    System.out.print("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ");
-                    writer.write("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ");
+                    printSave("P1/P2 l." + (i + 1) + "/l." + (i + 1) + ": ", writer);
                     stringDiff(line1, line2, writer);
-                    System.out.println("P1 l." + (i + 1) + ": " + line1);
-                    System.out.println("P2 l." + (i + 1) + ": " + line2);
+                    printlnSave("P1 l." + (i + 1) + ": " + line1, writer);
+                    printlnSave("P2 l." + (i + 1) + ": " + line2, writer);
                     addSet.add(line1);
                     addSet.add(line2);
-                    writer.write("P1 l." + (i + 1) + ": " + line1 + "\n");
-                    writer.write("P2 l." + (i + 1) + ": " + line2 + "\n");
                 }
             }
         }
 
-        System.out.println("\nDodatkowe linie:");
-        writer.write("\nDodatkowe linie:\n");
+        printlnSave("\nDodatkowe linie:", writer);
         if (size1 <= size2) {
             for (int i = 0; i < size2; i++) {
                 if (!(addSet.contains(list2.get(i)))) {
-                    System.out.println("P2 l." + (i + 1) + ": " + list2.get(i));
-                    writer.write("P2 l." + (i + 1) + ": " + list2.get(i) + "\n");
+                    printlnSave("P2 l." + (i + 1) + ": " + list2.get(i), writer);
                 }
             }
         } else {
             for (int i = 0; i < size1; i++) {
                 if (!(addSet.contains(list1.get(i)))) {
-                    System.out.println("P1 l." + (i + 1) + ": " + list1.get(i));
-                    writer.write("P1 l." + (i + 1) + ": " + list1.get(i) + "\n");
+                    printlnSave("P1 l." + (i + 1) + ": " + list1.get(i), writer);
                 }
             }
         }
         writer.close();
     }
 
-    public static void stringDiff(String in1, String in2, BufferedWriter writer) throws IOException {
+    public static void stringDiff(String in1, String in2, PrintWriter writer) throws IOException {
         String[] array1 = in1.split(" ");
         String[] array2 = in2.split(" ");
 
         for (int i = 0; i < array1.length; i++) {
             try {
                 if (array1[i].equals(array2[i])) {
-                    System.out.print(array1[i] + " ");
-                    writer.write(array1[i] + " ");
+                    printSave(array1[i] + " ", writer);
                 } else {
-                    System.out.print("\"" + array1[i] + "\" / \"" + array2[i] + "\" ");
-                    writer.write("\"" + array1[i] + "\" / \"" + array2[i] + "\" ");
+                    printSave("\"" + array1[i] + "\" / \"" + array2[i] + "\" ", writer);
                 }
             } catch (ArrayIndexOutOfBoundsException ignored) {
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
-        System.out.println();
-        writer.write("\n");
+        printlnSave("", writer);
+    }
+
+    private static void printSave(String input, PrintWriter writer) {
+        System.out.print(input);
+        writer.write(input);
+    }
+
+    private static void printlnSave(String input, PrintWriter writer) throws IOException {
+        System.out.println(input);
+        writer.println(input);
     }
 }
